@@ -1,4 +1,5 @@
 let applications;
+let goal;
 
 (() => {
   checkApplications();
@@ -13,12 +14,24 @@ async function fetchApplications() {
   });
 }
 
+// Fetch goal from storage
+async function fetchApplicationGoal() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(["goal"], (obj) => {
+      resolve(obj["goal"] ? JSON.parse(obj["goal"]) : 0);
+    });
+  });
+}
+
 async function checkApplications() {
   applications = await fetchApplications();
+  goal = await fetchApplicationGoal();
 
   console.log("Total applications:", applications);
 
-  if (applications < 1) {
+  console.log(applications < goal);
+
+  if (applications < goal) {
     // If the user has not reached their daily goal, create a notification
     createAlarm();
     createNotification();
@@ -59,7 +72,11 @@ function createNotification() {
 // Checks the URL of the tab and creates an alarm if the URL is not a LinkedIn Jobs page
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (changeInfo.status === "complete") {
-    if (tab.url && !tab.url.includes("linkedin.com/jobs") && applications > 1) {
+    if (
+      tab.url &&
+      !tab.url.includes("linkedin.com/jobs") &&
+      applications < goal
+    ) {
       createNotification();
     }
   }
@@ -105,7 +122,7 @@ function incrementApplicationsAlarm() {
 // Listens for the applications incremented alarm and creates a notification
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "applications_incremented") {
-    if (applications >= 1) {
+    if (applications >= goal) {
       chrome.notifications.create(
         "applications_incremented",
         {

@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Set goal input value from storage
   chrome.storage.sync.get(["goal"], (obj) => {
-    goalInput.value = obj["goal"] || 0;
+    goalInput.value = obj["goal"];
   });
 
   applicationElement.textContent = applications;
