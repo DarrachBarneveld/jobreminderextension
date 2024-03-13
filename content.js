@@ -22,10 +22,7 @@ const callback = function (mutationsList, observer) {
   const urlParams = new URLSearchParams(window.location.search);
   const currentJobId = urlParams.get("currentJobId");
   for (const mutation of mutationsList) {
-    if (
-      mutation.target.tagName === "BUTTON" &&
-      mutation.target.getAttribute("data-job-id") === currentJobId
-    ) {
+    if (mutation.target.classList.contains("jobs-apply-button")) {
       const button = mutation.target;
 
       if (!button.classList.contains("applied")) {
@@ -41,5 +38,12 @@ const callback = function (mutationsList, observer) {
     }
   }
 };
-const observer = new MutationObserver(callback);
-observer.observe(document.body, { childList: true, subtree: true });
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.message === "tab_updated") {
+    // Call the callback function
+    console.log("callback fired");
+    const observer = new MutationObserver(callback);
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+});
