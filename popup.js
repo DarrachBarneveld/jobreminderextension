@@ -6,3 +6,11 @@ export async function getActiveTabURL() {
 
   return tabs[0];
 }
+
+const testBtn = document.getElementById("testBtn");
+
+testBtn.addEventListener("click", async () => {
+  const response = await getActiveTabURL();
+
+  console.log(response);
+});
