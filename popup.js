@@ -7,10 +7,30 @@ async function getActiveTabURL() {
   return tabs[0];
 }
 
-const testBtn = document.getElementById("testBtn");
+async function fetchApplications() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(["applications"], (obj) => {
+      resolve(obj["applications"] ? JSON.parse(obj["applications"]) : 0);
+    });
+  });
+}
 
-testBtn.addEventListener("click", async () => {
-  const response = await getActiveTabURL();
+const goalInput = document.getElementById("goalAmount");
+const applicationElement = document.getElementById("applications");
 
-  console.log(response);
+document.addEventListener("DOMContentLoaded", async () => {
+  const applications = await fetchApplications();
+
+  // Set goal input value from storage
+  chrome.storage.sync.get(["goal"], (obj) => {
+    goalInput.value = obj["goal"] || 0;
+  });
+
+  applicationElement.textContent = applications;
+});
+
+// Update applications goal
+goalInput.addEventListener("change", async () => {
+  const goal = goalInput.value;
+  chrome.storage.sync.set({ goal });
 });

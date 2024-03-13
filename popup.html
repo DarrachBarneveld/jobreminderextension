@@ -6,23 +6,31 @@
     <title>LinkedIn Job Application Tracker</title>
     <link href="popup.css" rel="stylesheet" type="text/css" />
     <script type="module" src="popup.js"></script>
-    <!-- <link
+    <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script> -->
   </head>
   <body>
     <div class="container text-center p-2">
       <h1 class="">LinkedIn Job Application Tracker</h1>
-      <p class="text-secondary text-nowrap">Todays Applications:</p>
-      <button class="btn btn-primary my-2" id="testBtn">Test me</button>
+      <p class="text-secondary text-nowrap">
+        Todays Applications: <span id="applications">0</span>
+      </p>
+
+      <div class="form-group">
+        <label for="goalAmount">Goal Amount:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="goalAmount"
+          name="goalAmount"
+          min="0"
+          value="0"
+        />
+      </div>
     </div>
   </body>
 </html>

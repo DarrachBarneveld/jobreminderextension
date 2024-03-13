@@ -1,5 +1,9 @@
 let applications;
 
+(() => {
+  checkApplications();
+})();
+
 // Fetch applications from storage
 async function fetchApplications() {
   return new Promise((resolve) => {
@@ -20,10 +24,6 @@ async function checkApplications() {
     createNotification();
   }
 }
-
-(() => {
-  checkApplications();
-})();
 
 // Redirect to LinkedIn Jobs page when notification is clicked
 chrome.notifications.onClicked.addListener((notificationId) => {
@@ -58,29 +58,20 @@ function createNotification() {
 
 // Checks the URL of the tab and creates an alarm if the URL is not a LinkedIn Jobs page
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (tab.url && !tab.url.includes("linkedin.com/jobs") && applications > 1) {
-    createNotification();
+  if (changeInfo.status === "complete") {
+    if (tab.url && !tab.url.includes("linkedin.com/jobs") && applications > 1) {
+      createNotification();
+    }
   }
 });
 
-// Listerns for tab updates and sends a message to content.js
+// Listens for tab updates and sends a message to content.js
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (changeInfo.status === "complete") {
-    chrome.tabs.sendMessage(
-      tabId,
-      { message: "tab_updated" },
-      function (response) {
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError.message);
-        } else {
-          // Handle the response
-        }
-      }
-    );
-  }
-
-  if (tab.url && !tab.url.includes("linkedin.com/jobs")) {
-    checkApplications();
+    chrome.tabs.sendMessage(tabId, { message: "tab_updated" });
+    if (tab.url && !tab.url.includes("linkedin.com/jobs")) {
+      checkApplications();
+    }
   }
 });
 
