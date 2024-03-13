@@ -71,7 +71,7 @@
 
 // chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 //   console.log(tab.url);
-//   if (tab.url && !tab.url.includes("linkedin.com/jobs")) {
+//   if (tab.url && tab.url.includes("linkedin.com/jobs")) {
 //     console.log("Not on LinkedIn Jobs Page");
 
 //     createAlarm();
