@@ -27,13 +27,17 @@ const callback = function (mutationsList, observer) {
       mutation.target.getAttribute("data-job-id") === currentJobId
     ) {
       const button = mutation.target;
-      console.log("button", button);
-      button.style.backgroundColor = "red";
-      button.addEventListener("click", () => {
-        console.log("click");
-      });
+
+      if (!button.classList.contains("applied")) {
+        button.classList.add("applied");
+        button.style.backgroundColor = "red";
+        button.addEventListener("click", () => {
+          console.log("click");
+        });
+      }
 
       observer.disconnect();
+      return;
     }
   }
 };
