@@ -40,8 +40,8 @@ const callback = function (mutationsList, observer) {
 };
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log(request);
   if (request.message === "tab_updated") {
-    console.log("tab");
     const observer = new MutationObserver(callback);
     observer.observe(document.body, { childList: true, subtree: true });
   }
