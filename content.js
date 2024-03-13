@@ -10,9 +10,9 @@ async function fetchApplications() {
 
 (() => {
   async function init() {
-    chrome.storage.sync.clear(() => {
-      console.log("Storage cleared");
-    });
+    // chrome.storage.sync.clear(() => {
+    //   console.log("Storage cleared");
+    // });
   }
 
   init();

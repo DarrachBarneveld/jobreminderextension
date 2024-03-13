@@ -14,7 +14,7 @@ async function checkApplications() {
 
   console.log("Total applications:", applications);
 
-  if (applications < 5) {
+  if (applications < 1) {
     // If the user has not reached their daily goal, create a notification
     createAlarm();
     createNotification();
@@ -62,15 +62,18 @@ function createNotification() {
 
 // Checks the URL of the tab and creates an alarm if the URL is not a LinkedIn Jobs page
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (tab.url && !tab.url.includes("linkedin.com/jobs") && applications > 5) {
-    createAlarm();
+  if (tab.url && !tab.url.includes("linkedin.com/jobs") && applications > 1) {
+    createNotification();
   }
 });
 
 // Listerns for tab updates and sends a message to content.js
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   chrome.tabs.sendMessage(tabId, { message: "tab_updated" });
-  checkApplications();
+
+  if (tab.url && !tab.url.includes("linkedin.com/jobs")) {
+    checkApplications();
+  }
 });
 
 // Listens for messages from content.js and increments the applications count
@@ -103,7 +106,7 @@ function incrementApplicationsAlarm() {
 // Listens for the applications incremented alarm and creates a notification
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "applications_incremented") {
-    if (applications >= 5) {
+    if (applications >= 1) {
       chrome.notifications.create(
         "applications_incremented",
         {
