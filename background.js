@@ -27,13 +27,10 @@ async function checkApplications() {
   applications = await fetchApplications();
   goal = await fetchApplicationGoal();
 
-  console.log("Total applications:", applications);
-
-  console.log(applications < goal);
-
   if (applications < goal) {
     // If the user has not reached their daily goal, create a notification
     createAlarm();
+    console.log("create notification");
     createNotification();
   }
 }
@@ -77,7 +74,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
       !tab.url.includes("linkedin.com/jobs") &&
       applications < goal
     ) {
-      createNotification();
+      checkApplications();
     }
   }
 });

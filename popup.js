@@ -17,6 +17,7 @@ async function fetchApplications() {
 
 const goalInput = document.getElementById("goalAmount");
 const applicationElement = document.getElementById("applications");
+const goalCount = document.getElementById("goalCount");
 
 document.addEventListener("DOMContentLoaded", async () => {
   const applications = await fetchApplications();
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Set goal input value from storage
   chrome.storage.sync.get(["goal"], (obj) => {
     goalInput.value = obj["goal"];
+    goalCount.textContent = goalInput.value;
   });
 
   applicationElement.textContent = applications;
