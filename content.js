@@ -1,20 +1,19 @@
-(() => {
-  let applications = "";
+let applications = "";
 
-  async function fetchApplications() {
-    return new Promise((resolve) => {
-      chrome.storage.sync.get([applications], (obj) => {
-        resolve(obj[applications] ? JSON.parse(obj[applications]) : []);
-      });
+async function fetchApplications() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(["applications"], (obj) => {
+      resolve(obj["applications"] ? JSON.parse(obj["applications"]) : []);
     });
-  }
+  });
+}
 
+(() => {
   async function init() {
-    const applications = await fetchApplications();
+    applications = await fetchApplications();
     console.log("applications", applications);
   }
 
-  console.log("content.js is running");
   init();
 })();
 
@@ -28,8 +27,23 @@ const callback = function (mutationsList, observer) {
       if (!button.classList.contains("applied")) {
         button.classList.add("applied");
         button.style.backgroundColor = "red";
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
           console.log("click");
+
+          applications = await fetchApplications();
+
+          applications++;
+
+          console.log(applications);
+          chrome.storage.sync.set({ applications }, () => {
+            console.log("Applications value incremented");
+
+            // Send a message
+            chrome.runtime.sendMessage({
+              message: "applications_incremented",
+              applications,
+            });
+          });
         });
       }
 

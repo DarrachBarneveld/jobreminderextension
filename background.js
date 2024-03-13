@@ -1,3 +1,5 @@
+let applications = 0;
+
 // chrome.storage.local.get("jobsCount", function (data) {
 //   let jobsCount = data.jobsCount || 0;
 //   // Check if the count exceeds the limit
@@ -42,13 +44,6 @@
 //   sendResponse(false);
 // });
 
-// function createAlarm() {
-//   chrome.alarms.create("job_hunt", {
-//     delayInMinutes: 0,
-//     periodInMinutes: 1,
-//   });
-// }
-
 // function createNotification() {
 //   chrome.notifications.create(
 //     "job_hunt",
@@ -80,4 +75,42 @@
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   chrome.tabs.sendMessage(tabId, { message: "tab_updated" });
+});
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.message == "applications_incremented") {
+    applications = request.applications;
+    incrementApplicationsAlarm();
+  }
+
+  sendResponse(() => {
+    return false;
+  });
+});
+
+function incrementApplicationsAlarm() {
+  chrome.alarms.create("applications_incremented", {
+    delayInMinutes: 0,
+    periodInMinutes: 1,
+  });
+}
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  chrome.notifications.create(
+    "applications_incremented",
+    {
+      type: "basic",
+      iconUrl: "/images/jobapplication.jpg",
+      title: "Application Sent",
+      message: `You have sent ${applications} applications today!`,
+      silent: false,
+    },
+    (notificationId) => {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+      } else {
+        console.log(`Notification ${notificationId} created.`);
+      }
+    }
+  );
 });
