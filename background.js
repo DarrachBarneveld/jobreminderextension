@@ -45,17 +45,13 @@ function createNotification() {
     "job_hunt",
     {
       type: "basic",
-      iconUrl: "/images/jobapplication.jpg",
+      iconUrl: "images/application.png",
       title: "Daily Goal Not Reached!",
       message: "Apply For More Jobs Now!",
       silent: false,
     },
     (notificationId) => {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError.message);
-      } else {
-        console.log(`Notification ${notificationId} created.`);
-      }
+      console.log(`Notification ${notificationId} created.`);
     }
   );
 }
@@ -69,7 +65,19 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
 // Listerns for tab updates and sends a message to content.js
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  chrome.tabs.sendMessage(tabId, { message: "tab_updated" });
+  if (changeInfo.status === "complete") {
+    chrome.tabs.sendMessage(
+      tabId,
+      { message: "tab_updated" },
+      function (response) {
+        if (chrome.runtime.lastError) {
+          console.error(chrome.runtime.lastError.message);
+        } else {
+          // Handle the response
+        }
+      }
+    );
+  }
 
   if (tab.url && !tab.url.includes("linkedin.com/jobs")) {
     checkApplications();
@@ -111,17 +119,13 @@ chrome.alarms.onAlarm.addListener((alarm) => {
         "applications_incremented",
         {
           type: "basic",
-          iconUrl: "/images/jobapplication.jpg",
+          iconUrl: "images/application.png",
           title: "Goal Reached!",
           message: `You have sent enough applications today!`,
           silent: false,
         },
         (notificationId) => {
-          if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError.message);
-          } else {
-            console.log(`Notification ${notificationId} created.`);
-          }
+          console.log(`Notification ${notificationId} created.`);
         }
       );
     } else {
@@ -129,17 +133,13 @@ chrome.alarms.onAlarm.addListener((alarm) => {
         "applications_incremented",
         {
           type: "basic",
-          iconUrl: "/images/jobapplication.jpg",
+          iconUrl: "images/application.png",
           title: "Application Sent",
           message: `You have sent ${applications} applications today!`,
           silent: false,
         },
         (notificationId) => {
-          if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError.message);
-          } else {
-            console.log(`Notification ${notificationId} created.`);
-          }
+          console.log(`Notification ${notificationId} created.`);
         }
       );
     }

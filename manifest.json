@@ -1,17 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "Job Application Counter",
+  "name": "Job application Counter",
   "description": "Make sure you reach your daily job application goal!",
   "version": "1.0.0",
   "icons": {
-    "16": "images/application.jpg",
-    "32": "images/application.jpg",
-    "48": "images/application.jpg",
-    "128": "images/application.jpg"
+    "16": "images/application.png",
+    "32": "images/application.png",
+    "48": "images/application.png",
+    "128": "images/application.png"
   },
   "web_accessible_resources": [
     {
-      "resources": ["images/application.jpg"],
+      "resources": ["images/application.png"],
       "matches": ["https://*.linkedin.com/*"]
     }
   ],
@@ -19,9 +19,9 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "LI Job Application Counter",
+    "default_title": "LI Job application Counter",
     "default_popup": "popup.html",
-    "default_icon": "images/application.jpg"
+    "default_icon": "images/application.png"
   },
   "host_permissions": ["https://*.linkedin.com/*"],
   "permissions": ["notifications", "storage", "alarms", "tabs"],

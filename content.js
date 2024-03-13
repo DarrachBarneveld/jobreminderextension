@@ -20,6 +20,7 @@ async function fetchApplications() {
 
 const callback = function (mutationsList, observer) {
   const urlParams = new URLSearchParams(window.location.search);
+  console.log("callback fired");
   const currentJobId = urlParams.get("currentJobId");
   for (const mutation of mutationsList) {
     if (mutation.target.classList.contains("jobs-apply-button")) {
@@ -43,6 +44,7 @@ const callback = function (mutationsList, observer) {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message === "tab_updated") {
+    console.log("tab");
     const observer = new MutationObserver(callback);
     observer.observe(document.body, { childList: true, subtree: true });
   }
