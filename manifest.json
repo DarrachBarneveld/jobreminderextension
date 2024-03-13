@@ -4,14 +4,14 @@
   "description": "Make sure you reach your daily job application goal!",
   "version": "1.0.0",
   "icons": {
-    "16": "images/jobapplication.jpg",
-    "32": "images/jobapplication.jpg",
-    "48": "images/jobapplication.jpg",
-    "128": "images/jobapplication.jpg"
+    "16": "images/application.jpg",
+    "32": "images/application.jpg",
+    "48": "images/application.jpg",
+    "128": "images/application.jpg"
   },
   "web_accessible_resources": [
     {
-      "resources": ["images/jobapplication.jpg"],
+      "resources": ["images/application.jpg"],
       "matches": ["https://*.linkedin.com/*"]
     }
   ],
@@ -21,7 +21,7 @@
   "action": {
     "default_title": "LI Job Application Counter",
     "default_popup": "popup.html",
-    "default_icon": "images/jobapplication.jpg"
+    "default_icon": "images/application.jpg"
   },
   "host_permissions": ["https://*.linkedin.com/*"],
   "permissions": ["notifications", "storage", "alarms", "tabs"],
