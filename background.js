@@ -57,12 +57,29 @@ function isDateToday(inputDate) {
     if (request.message == "applications_incremented") {
       applications = await fetchApplications();
 
-      let newApplication = { date: new Date(), id: request.id };
-      applications.push(newApplication);
+      const newApplication = { date: new Date(), id: request.id };
 
-      chrome.storage.sync.set({ applications: JSON.stringify(applications) });
+      if (!applications.some((app) => app.id === newApplication.id)) {
+        applications.push(newApplication);
 
-      incrementApplicationsAlarm();
+        chrome.storage.sync.set({ applications: JSON.stringify(applications) });
+
+        incrementApplicationsAlarm();
+      } else {
+        chrome.notifications.create(
+          "already_applied",
+          {
+            type: "basic",
+            iconUrl: "images/application.png",
+            title: "You have already applied!",
+            message: `Choose another job to apply for!`,
+            silent: false,
+          },
+          (notificationId) => {
+            console.log(`Notification ${notificationId} created.`);
+          }
+        );
+      }
     }
     sendResponse(() => {
       return false;
