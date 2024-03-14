@@ -1,6 +1,16 @@
 let applications;
 let goal;
 
+function isDateToday(inputDate) {
+  const todaysDate = new Date();
+  todaysDate.setHours(0, 0, 0, 0);
+
+  const inputDateWithoutTime = new Date(inputDate);
+  inputDateWithoutTime.setHours(0, 0, 0, 0);
+
+  return inputDateWithoutTime.getTime() === todaysDate.getTime();
+}
+
 (() => {
   checkApplications();
 
@@ -14,10 +24,6 @@ let goal;
   // Listens for tab updates and sends a message to content.js
   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (changeInfo.status === "complete") {
-      console.log(tab);
-      console.log(tabId);
-      console.log(changeInfo);
-
       chrome.tabs
         .sendMessage(tabId, { message: "tab_updated" })
         .catch((err) => {
@@ -51,9 +57,10 @@ let goal;
     if (request.message == "applications_incremented") {
       applications = await fetchApplications();
 
-      applications++;
+      let newApplication = { date: new Date(), id: request.id };
+      applications.push(newApplication);
 
-      chrome.storage.sync.set({ applications });
+      chrome.storage.sync.set({ applications: JSON.stringify(applications) });
 
       incrementApplicationsAlarm();
     }
@@ -65,7 +72,7 @@ let goal;
   // Listens for the applications incremented alarm and creates a notification
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === "applications_incremented") {
-      if (applications >= goal) {
+      if (applications.length >= goal) {
         chrome.notifications.create(
           "applications_incremented",
           {
@@ -86,7 +93,7 @@ let goal;
             type: "basic",
             iconUrl: "images/application.png",
             title: "Application Sent",
-            message: `You have sent ${applications} applications today!`,
+            message: `You have sent ${applications.length} applications today!`,
             silent: false,
           },
           (notificationId) => {
@@ -102,7 +109,7 @@ let goal;
 async function fetchApplications() {
   return new Promise((resolve) => {
     chrome.storage.sync.get(["applications"], (obj) => {
-      resolve(obj["applications"] ? JSON.parse(obj["applications"]) : 0);
+      resolve(obj["applications"] ? JSON.parse(obj["applications"]) : []);
     });
   });
 }
@@ -118,9 +125,18 @@ async function fetchApplicationGoal() {
 
 async function checkApplications() {
   applications = await fetchApplications();
+
+  applications.forEach((application) => {
+    console.log(application);
+  });
+
+  const todayApplications = applications.filter((application) =>
+    isDateToday(application.date)
+  );
+
   goal = await fetchApplicationGoal();
 
-  if (applications < goal) {
+  if (todayApplications.length < goal) {
     // If the user has not reached their daily goal, create a notification
     createAlarm();
     console.log("create notification");

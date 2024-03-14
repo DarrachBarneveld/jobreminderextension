@@ -1,13 +1,3 @@
-let applications = "";
-
-async function fetchApplications() {
-  return new Promise((resolve) => {
-    chrome.storage.sync.get(["applications"], (obj) => {
-      resolve(obj["applications"] ? JSON.parse(obj["applications"]) : 0);
-    });
-  });
-}
-
 (() => {
   async function init() {
     // chrome.storage.sync.clear(() => {
@@ -19,6 +9,9 @@ async function fetchApplications() {
 })();
 
 const callback = function (mutationsList, observer) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentJobId = urlParams.get("currentJobId");
+
   for (const mutation of mutationsList) {
     if (mutation.target.classList.contains("jobs-apply-button")) {
       const button = mutation.target;
@@ -29,6 +22,7 @@ const callback = function (mutationsList, observer) {
         button.addEventListener("click", async () => {
           chrome.runtime.sendMessage({
             message: "applications_incremented",
+            id: currentJobId,
           });
         });
       }
@@ -40,7 +34,6 @@ const callback = function (mutationsList, observer) {
 };
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log(request);
   if (request.message === "tab_updated") {
     const observer = new MutationObserver(callback);
     observer.observe(document.body, { childList: true, subtree: true });

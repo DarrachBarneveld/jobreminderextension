@@ -3,8 +3,18 @@
 }
 
 .container {
-  min-width: 200px !important;
+  min-width: 250px !important;
   font: bolder;
   border: 2px solid var(--clr-blue);
   border-radius: 5px;
+}
+
+.applications:hover {
+  color: var(--clr-blue) !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
+}
+
+.hide {
+  display: none !important;
 }
