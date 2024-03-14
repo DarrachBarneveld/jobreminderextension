@@ -23,13 +23,13 @@
     "default_popup": "popup.html",
     "default_icon": "images/application.png"
   },
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": ["https://*.linkedin.com/jobs*"],
   "permissions": ["notifications", "storage", "alarms", "tabs", "scripting"],
   "content_scripts": [
     {
       "js": ["content.js"],
       "css": ["content.css"],
-      "matches": ["<all_urls>"]
+      "matches": ["https://*.linkedin.com/jobs*"]
     }
   ]
 }

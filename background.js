@@ -24,13 +24,14 @@ function isDateToday(inputDate) {
   // Listens for tab updates and sends a message to content.js
   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (changeInfo.status === "complete") {
-      chrome.tabs
-        .sendMessage(tabId, { message: "tab_updated" })
-        .catch((err) => {
-          console.log(err);
-        });
       if (tab.url && !tab.url.includes("linkedin.com/jobs")) {
         checkApplications();
+      } else {
+        chrome.tabs
+          .sendMessage(tabId, { message: "tab_updated" })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     }
   });
@@ -142,10 +143,6 @@ async function fetchApplicationGoal() {
 
 async function checkApplications() {
   applications = await fetchApplications();
-
-  applications.forEach((application) => {
-    console.log(application);
-  });
 
   const todayApplications = applications.filter((application) =>
     isDateToday(application.date)
