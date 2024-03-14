@@ -18,7 +18,7 @@ const callback = function (mutationsList, observer) {
 
       if (!button.classList.contains("applied")) {
         button.classList.add("applied");
-        button.style.backgroundColor = "red";
+        button.style.backgroundColor = "purple";
         button.addEventListener("click", async () => {
           chrome.runtime.sendMessage({
             message: "applications_incremented",
