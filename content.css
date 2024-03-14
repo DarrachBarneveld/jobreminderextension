@@ -1,0 +1,20 @@
+:root {
+  --clr-purple: rgb(98, 71, 170);
+}
+
+.application-tracker-button {
+  background-color: var(--clr-purple) !important;
+  background-image: linear-gradient(
+    316deg,
+    var(--clr-purple) 0%,
+    #a594f9 74%
+  ) !important;
+  box-shadow: rgba(98, 71, 170, 0.4) 0px 5px, rgba(98, 71, 170, 0.3) 0px 10px,
+    rgba(98, 71, 170, 0.2) 0px 15px, rgba(98, 71, 170, 0.1) 0px 20px,
+    rgba(98, 71, 170, 0.05) 0px 25px;
+}
+
+.application-tracker-button:hover,
+.application-tracker-button:focus {
+  transform: scale(0.97);
+}

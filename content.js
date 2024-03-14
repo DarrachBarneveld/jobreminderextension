@@ -16,9 +16,8 @@ const callback = function (mutationsList, observer) {
     if (mutation.target.classList.contains("jobs-apply-button")) {
       const button = mutation.target;
 
-      if (!button.classList.contains("applied")) {
-        button.classList.add("applied");
-        button.style.backgroundColor = "purple";
+      if (!button.classList.contains("application-tracker-button")) {
+        button.classList.add("application-tracker-button");
         button.addEventListener("click", async () => {
           chrome.runtime.sendMessage({
             message: "applications_incremented",
