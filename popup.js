@@ -78,7 +78,7 @@ async function createApplicationList(button) {
     <li class="list-group-item px-1 d-flex justify-content-between align-content-center">
     <span>${time}</span>
     <a
-      href="https://www.linkedin.com/jobs/currentJobId=${app.id}/"
+      href="https://www.linkedin.com/jobs//view/${app.id}/"
       target="_blank"
       class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
       >${app.id}</a
