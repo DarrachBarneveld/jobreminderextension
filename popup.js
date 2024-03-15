@@ -1,4 +1,11 @@
-import { fetchApplications } from "./background";
+// Fetch applications from storage
+async function fetchApplications() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(["applications"], (obj) => {
+      resolve(obj["applications"] ? JSON.parse(obj["applications"]) : []);
+    });
+  });
+}
 
 async function getActiveTabURL() {
   const tabs = await chrome.tabs.query({
@@ -52,6 +59,8 @@ goalInput.addEventListener("change", async () => {
   }
   goalCount.textContent = goal;
 
+  console.log("Goal updated to", goal);
+
   chrome.storage.sync.set({ goal });
 });
 
@@ -81,15 +90,24 @@ async function createApplicationList(button) {
       class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
       >${app.id}</a
     >
+    <button id=${app.id} class="btn-delete">X</button>
   </li>
   `;
   });
 
   listHtml += "</ul>";
 
-  console.log(listHtml);
-
   button.insertAdjacentHTML("afterend", listHtml);
+
+  const deleteButtons = document.querySelectorAll(".btn-delete");
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", async (e) => {
+      const id = e.target.id;
+      applications = applications.filter((app) => app.id !== id);
+      chrome.storage.sync.set({ applications: JSON.stringify(applications) });
+      createApplicationList(applicationBtn);
+    });
+  });
 }
 
 applicationBtn.addEventListener("click", async (e) => {

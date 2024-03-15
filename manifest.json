@@ -11,7 +11,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["images/application.png"],
+      "resources": ["images/application.png", "utils.js"],
       "matches": ["https://*.linkedin.com/*"]
     }
   ],
