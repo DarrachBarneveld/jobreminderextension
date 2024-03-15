@@ -152,17 +152,8 @@ async function checkApplications() {
 
   if (todayApplications.length < goal) {
     // If the user has not reached their daily goal, create a notification
-    createAlarm();
-    console.log("create notification");
     createNotification();
   }
-}
-
-// Create an alarm to remind the user to apply for more jobs
-function createAlarm() {
-  chrome.alarms.create("job_hunt", {
-    delayInMinutes: 0,
-  });
 }
 
 // Create LinkedIn Jobs page notification
@@ -185,6 +176,13 @@ function createNotification() {
 // Increments the applications incremented alarm
 function incrementApplicationsAlarm() {
   chrome.alarms.create("applications_incremented", {
+    delayInMinutes: 0,
+  });
+}
+
+// Create an alarm to remind the user to apply for more jobs
+function createJobHuntAlarm() {
+  chrome.alarms.create("job_hunt", {
     delayInMinutes: 0,
   });
 }
