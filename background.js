@@ -124,7 +124,7 @@ function isDateToday(inputDate) {
 })();
 
 // Fetch applications from storage
-async function fetchApplications() {
+export async function fetchApplications() {
   return new Promise((resolve) => {
     chrome.storage.sync.get(["applications"], (obj) => {
       resolve(obj["applications"] ? JSON.parse(obj["applications"]) : []);

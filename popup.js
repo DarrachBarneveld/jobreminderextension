@@ -1,3 +1,5 @@
+import { fetchApplications } from "./background";
+
 async function getActiveTabURL() {
   const tabs = await chrome.tabs.query({
     currentWindow: true,
@@ -15,14 +17,6 @@ function isDateToday(inputDate) {
   inputDateWithoutTime.setHours(0, 0, 0, 0);
 
   return inputDateWithoutTime.getTime() === todaysDate.getTime();
-}
-
-async function fetchApplications() {
-  return new Promise((resolve) => {
-    chrome.storage.sync.get(["applications"], (obj) => {
-      resolve(obj["applications"] ? JSON.parse(obj["applications"]) : []);
-    });
-  });
 }
 
 const goalInput = document.getElementById("goalAmount");
