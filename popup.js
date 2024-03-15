@@ -38,10 +38,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Set goal input value from storage
   chrome.storage.sync.get(["goal"], (obj) => {
-    goalInput.value = obj["goal"];
-    goalCount.textContent = goalInput.value;
-  });
+    let goalValue = obj["goal"] || 0;
+    goalInput.value = goalValue;
+    goalCount.textContent = goalValue;
 
+    if (!obj["goal"]) {
+      chrome.storage.sync.set({ goal: goalValue });
+    }
+  });
   applicationElement.textContent = todaysApplications.length;
 });
 

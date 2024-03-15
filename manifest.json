@@ -29,7 +29,8 @@
     {
       "js": ["content.js"],
       "css": ["content.css"],
-      "matches": ["https://*.linkedin.com/jobs*"]
+      "matches": ["https://*.linkedin.com/jobs*"],
+      "type": "module"
     }
   ]
 }
